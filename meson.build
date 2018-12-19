@@ -1,55 +1,34 @@
 
 project(
-    'Skeletal Application Framework',
+    'Barebones',
     'cpp',
     version : '0.0.0', # This is oveverridden in the conf_data section
     default_options:
     [
         'cpp_std=c++17',
-        'warning_level=3'
+        'warning_level=1'
     ],
     meson_version: '>=0.48.0'
     )
 
-executable_name = 'skeleton'
+executable_name = 'bones'
 pkgconfig = import('pkgconfig')
 cpp = meson.get_compiler('cpp')
 
-conf_data = configuration_data()
-conf_data.set('name', meson.project_name())
-
-conf_data.set('compiler_name', cpp.get_id())
-conf_data.set('compiler_version', cpp.version())
-conf_data.set('host_machine', host_machine.system())
-conf_data.set('cpu_family', build_machine.cpu_family())
-
-conf_data.set('major', '0')
-conf_data.set('minor', '0')
-conf_data.set('patch', '1')
-conf_data.set('compile', '0')
-
-configure_file(input : 'src/config.h.in',
-              output : 'config.h',
-              configuration : conf_data)
-
-skeleton_src = [
-    'src/skeleton.cpp',
-    'src/base/base.cpp',
+bones_src = [
     'src/main.cpp'
     ]
 
-skeleton_include_directories = [
-    include_directories('src/'),
-    include_directories('include/'),
-	include_directories('thirdparty/include/'),
-    include_directories('/usr/lib/llvm-8/include/c++/v1/')
+bones_include_directories = [
+    include_directories('src/') # , Shouldn't have to hardcode in libc++'s include dir
+    # include_directories('/usr/lib/llvm-8/include/c++/v1/')
     ]
 
-skeleton_cflags = [
+bones_cflags = [
     '-stdlib=libc++'
     ]
 
-skeleton_ldflags = [
+bones_ldflags = [
     '-lc++',
     '-lc++abi'
     ]
@@ -60,22 +39,12 @@ skeleton_deps = [
     math
     ]
 
-if get_option('enable-threads')
-    skeleton_deps += dependency('threads') #This enables what ever on Windows and pthreads on Linux/Mac/Unix
-endif
-
-skeleton = executable(
+bones = executable(
     executable_name,
-    skeleton_src,
-    install : true,
-    dependencies: skeleton_deps,
-    include_directories: skeleton_include_directories,
-    cpp_args: skeleton_cflags,
-    link_args: skeleton_ldflags
+    bones_src,
+    dependencies: bones_deps,
+    include_directories: bones_include_directories,
+    cpp_args: bones_cflags,
+    link_args: bones_ldflags
 )
 
-install_data('LICENSE', install_dir: join_paths('share/doc', executable_name))
-
-if get_option('build-docs')
-    subdir('doc')
-endif
