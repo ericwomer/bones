@@ -35,7 +35,7 @@ bones_ldflags = [
 
 math = cpp.find_library('m', required: false)
 
-skeleton_deps = [
+bones_deps = [
     math
     ]
 
