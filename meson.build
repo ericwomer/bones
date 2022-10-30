@@ -20,17 +20,13 @@ bones_src = [
     ]
 
 bones_include_directories = [
-    include_directories('src/') # , Shouldn't have to hardcode in libc++'s include dir
-    # include_directories('/usr/lib/llvm-8/include/c++/v1/')
+    include_directories('src/') 
     ]
 
 bones_cflags = [
-    '-stdlib=libc++'
     ]
 
 bones_ldflags = [
-    '-lc++',
-    '-lc++abi'
     ]
 
 math = cpp.find_library('m', required: false)
