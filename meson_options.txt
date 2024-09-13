@@ -1,0 +1,6 @@
+option(
+    'example',
+    type: 'string',
+    value: 'read_me',
+    description: 'mesonbuild.com/Build-options.html#build-options',
+)

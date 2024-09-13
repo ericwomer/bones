@@ -1,16 +1,21 @@
+/**
+ * \file main.cpp
+ * \brief Vector bubble sort example
+ */
+
+#include <cstdlib>
 #include <iostream>
-#include <vector>
-#include <memory>
 
-using std::cerr;
-using std::cout;
-using std::exception;
-using std::make_unique;
-using std::string;
-using std::unique_ptr;
-using std::vector;
-
-int main(int argc, char* argv[])
+/**
+ * \brief Main entry point
+ * \param argc
+ * \param argv
+ * \return 0 if all goes well
+ */
+int main(int argc, char *argv[], char *envp[])
 {
+  // Do Work Here
+  std::cout << "Hello,World!\n";
+  
   return EXIT_SUCCESS;
 }
