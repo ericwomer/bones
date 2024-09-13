@@ -2,8 +2,8 @@ project(
     'Project', # Change Me
     'cpp',
     version: '0.0.0', # This is overridden in the conf_data section
-    default_options: ['cpp_std=c++20', 'warning_level=1'],
-    meson_version: '>=1.2.1',
+    default_options: ['cpp_std=c++20', 'warning_level=3', 'buildtype=debug'],
+    meson_version: '>=1.4.1',
 )
 
 executable_name = 'project' # Change Me
@@ -48,7 +48,7 @@ if cpp_family == 'gcc'
     project_cpp_args += ['-fdiagnostics-color=always']
     project_include_directories += [include_directories('/usr/include/')]
 elif cpp_family == 'clang'
-    project_cpp_args += ['-fcolor-diagnostics', '-stdlib=libc++']
+    project_cpp_args += ['-fcolor-diagnostics', '-stdlib=libc++', '-Wnon-gcc']
 
     project_include_directories += [
         include_directories('/usr/include/c++/v1/'),
