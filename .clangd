@@ -1,0 +1,15 @@
+CompileFlags:
+  CompilationDatabase: builddir
+
+Index:
+  Background: Build 
+  StandardLibrary: Yes
+
+Diagnostics:
+  ClangTidy:
+    FastCheckFilter: None
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+
+Completion:
+  AllScopes: Yes

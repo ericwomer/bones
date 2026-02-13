@@ -2,11 +2,12 @@ project(
     'Project', # Change Me
     'cpp',
     version: '0.0.0', # This is overridden in the conf_data section
-    default_options: ['cpp_std=c++20', 'warning_level=3', 'buildtype=debug'],
+    default_options: ['cpp_std=c++26', 'warning_level=3', 'buildtype=debug'],
     meson_version: '>=1.4.1',
 )
 
-executable_name = 'project' # Change Me
+executable_name = meson.project_name() # Change Me
+
 pkgconfig = import('pkgconfig')
 cpp = meson.get_compiler('cpp')
 cpp_family = cpp.get_id()
@@ -30,34 +31,50 @@ configure_file(
     configuration: conf_data,
 )
 
-project_src = [
+source = [
     'src/main.cpp',
 ]
 
-project_include_directories = [
+includes = [
     include_directories('src/'),
 ]
 
-project_cpp_args = []
-project_link_args = []
+cxxflags = []
+ldflags = []
+
 math = cpp.find_library('m', required: false)
 
-project_deps = [math]
+deps = [math]
 
 if cpp_family == 'gcc'
-    project_cpp_args += ['-fdiagnostics-color=always']
-    project_include_directories += [include_directories('/usr/include/')]
+    cxxflags += ['-fdiagnostics-color=always']
+    includes += [include_directories('/usr/include/')]
 elif cpp_family == 'clang'
-    project_cpp_args += ['-fcolor-diagnostics', '-stdlib=libc++', '-Wnon-gcc']
+    cxxflags += ['-fcolor-diagnostics', '-stdlib=libc++', '-Wnon-gcc']
 
-    project_include_directories += [
+    includes += [
         include_directories('/usr/include/c++/v1/'),
     ]
 
-    project_link_args += [
-        '-lc++',
-        '-lc++abi',
+  if get_option('nognu')
+    ldflags += [
+      '-L' + get_option('libcxx_prefix') + '/lib',
+      '-Wl,--rpath=' + get_option('libcxx_prefix') + '/lib',
+      '-stdlib=libc++',
+      '--rtlib=compiler-rt',
+      '--unwindlib=libunwind',
+      '-lc++',
+      '-lc++abi',
+      '-lunwind'
     ]
+  else 
+    ldflags += [
+      '-stdlib=libc++',
+      '-lc++',
+      '-lc++abi'
+      ]
+  endif
+
 
 else
     # Do something else for MSVC?
@@ -65,12 +82,12 @@ endif
 
 project = executable(
     executable_name,
-    project_src,
+    source,
     install: true,
-    dependencies: project_deps,
-    include_directories: project_include_directories,
-    cpp_args: project_cpp_args,
-    link_args: project_link_args,
+    dependencies: deps,
+    include_directories: includes,
+    cpp_args: cxxflags,
+    link_args: ldflags,
 )
 
 install_data('LICENSE', install_dir: join_paths('share/doc', executable_name))

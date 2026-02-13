@@ -142,7 +142,7 @@ tags
 # Built Visual Studio Code Extensions
 *.vsix
 
-## Cmake
+# Cmake
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -161,6 +161,11 @@ builddir/
 Build/
 BuildDir/
 
+# Exclude user created conan folder
+conan/
+
 # Exclude clangd generated folders/files
 .cache/*
 
+# Exclude app generated temp files 
+*.log
