@@ -1,0 +1,133 @@
+{
+  "version": 10,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "config-base",
+      "hidden": true,
+      "displayName": "Base Configuration",
+      "description": "Default build using the Ninja generator",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/cmake-build-${presetName}",
+      "cacheVariables": {
+        "CMAKE_COMPILE_WARNING_AS_ERROR": true,
+        "CMAKE_LINK_WARNING_AS_ERROR": true,
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_CXX_STANDARD": "26",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "1",
+        "USE_MOLD": "ON"
+      }
+    },
+    {
+      "name": "debug",
+      "displayName": "Config Debug",
+      "description": "Sets debug build type",
+      "inherits": "config-base",
+      "architecture": {
+        "value": "arm",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Config Release",
+      "description": "Sets release build type",
+      "inherits": "debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-base",
+      "hidden": true,
+      "configurePreset": "debug"
+    },
+    {
+      "name": "debug",
+      "displayName": "Build Debug",
+      "inherits": "build-base"
+    },
+    {
+      "name": "release",
+      "displayName": "Build Release",
+      "inherits": "build-base",
+      "configurePreset": "release",
+      "cleanFirst": true
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-base",
+      "hidden": true,
+      "configurePreset": "build-base",
+      "output": {
+        "outputOnFailure": true,
+        "verbosity": "verbose"
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "scheduleRandom": true,
+        "stopOnFailure": false,
+        "timeout": 60
+      }
+    },
+    {
+      "name": "debug",
+      "inherits": "test-base",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "release",
+      "inherits": "test-base",
+      "configurePreset": "release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "debug"
+        },
+        {
+          "type": "build",
+          "name": "debug"
+        },
+        {
+          "type": "test",
+          "name": "debug"
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "release"
+        },
+        {
+          "type": "build",
+          "name": "release"
+        },
+        {
+          "type": "test",
+          "name": "release"
+        }
+      ]
+    }
+  ]
+}

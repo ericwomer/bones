@@ -144,7 +144,8 @@ tags
 
 # Cmake
 CMakeLists.txt.user
-CMakeCache.txt
+CCMakeUserPresets.json
+MakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing

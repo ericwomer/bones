@@ -1,9 +1,0 @@
-option(
-    'example',
-    type: 'string',
-    value: 'read_me',
-    description: 'mesonbuild.com/Build-options.html#build-options',
-)
-
-option('nognu', type: 'boolean', value: false)
-option('libcxx_prefix', type: 'string', value: '/usr', description: 'Path to custom libc++')
